@@ -66,9 +66,39 @@
 
 // PUNTO 1: COLECCIONES
 object coleccionista {
+	var galeriaDeElementos = []
+	var microfono 
+	var estuche
 	
-	//TODO: Completar la implementacion de este objeto		
-
+	method microfono() = microfono
+	
+    method estucheParaGuitarra(unEstuche) {estuche= unEstuche}
+    
+    method estucheDeGuitarra() = estuche
+	
+	
+	method comprarNuevoMicrofono(unMicrofono){microfono= unMicrofono}
+	
+	method agregarElemento(unElemento){galeriaDeElementos.add(unElemento)}
+	
+	method quitarElemento(unElemento){galeriaDeElementos.remove(unElemento)}
+	
+	method objetosFragiles() = galeriaDeElementos.filter({elemento=>elemento.esFragil()}).asSet()
+	
+	method objetoFragilMasCaro() = self.objetosFragiles().max({elemento=>elemento.valor()})
+	
+	method valorEnObjetosFragiles() = self.objetosFragiles().sum({elemento=>elemento.valor()})
+	
+	//Devuelve los objetos que son de "unaCategoria"
+	method objetosDeUnaCategoria(unaCategoria) = galeriaDeElementos.filter({elemento=>elemento.categoria() == unaCategoria}).asSet()
+	
+	method valorEnCategoria(unaCategoria) = self.objetosDeUnaCategoria(unaCategoria).sum({elemento=>elemento.valor()})
+	
+	method existeElementoDe(unaCategoria) = galeriaDeElementos.any({elemento=>elemento.categoria() == unaCategoria})
+    
+    method categorias() = galeriaDeElementos.map({elemento=>elemento.categoria()}).asSet()
+    
+    method todosValiosos() = galeriaDeElementos.all({elemento=>elemento.valor() > 600})
 }
 
 
@@ -108,8 +138,33 @@ object musica {
 
 // PUNTO 2: POLIMORFISMO. 
 object guitarraElectrica {
-   //TODO Completar la implementacion de este objeto
+   var coleccionista
+   method categoria() = musica 
+   method valor() = 10000 + coleccionista.microfono().valor()
+   method duenioNuevo(_coleccionista){
+   	  coleccionista = _coleccionista
+   }
+   method esFragil()= coleccionista.estucheDeGuitarra().esFragil()  
+   
+   
+  
 }
 
 //TODO: agregar los objetos que falten! Si no agregaste ninguno repensá tu solución; pista: el punto se llama "POLIMORFISMO" 
+object gibson{
+	method valor() = 1000
+}
+
+object diMarzio{
+	method valor() = 800
+}
+
+object estucheFlexible{
+	
+	method esFragil() = true
+}
+
+object estucheRigido{
+	method esFragil() = false
+}
 
